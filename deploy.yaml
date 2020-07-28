@@ -1,0 +1,128 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: vote-app-deploy
+spec:
+  selector:
+    matchLabels:
+      app: demo-voting-app
+      name: vote-app-pod
+  template:
+    metadata:
+      labels:
+        app: demo-voting-app
+        name: vote-app-pod
+    spec:
+      containers:
+      - name: vote-container
+        image: naitik1992/vote:latest
+        resources:
+          limits:
+            memory: "128Mi"
+            cpu: "50m"
+        ports:
+        - containerPort: 80
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: result-app-deploy
+spec:
+  selector:
+    matchLabels:
+      app: demo-voting-app
+      name: result-app-pod
+  template:
+    metadata:
+      labels:
+         app: demo-voting-app
+         name: result-app-pod
+    spec:
+      containers:
+      - name: result-container
+        image: naitik1992/result:latest
+        resources:
+          limits:
+            memory: "128Mi"
+            cpu: "50m"
+        ports:
+        - containerPort: 80
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: worker-deploy
+spec:
+  selector:
+    matchLabels:
+      app: demo-voting-app
+      name: worker-pod
+  template:
+    metadata:
+      labels:
+          app: demo-voting-app
+          name: worker-pod
+    spec:
+      containers:
+      - name: worker-container
+        image: naitik1992/worker:latest
+        resources:
+          limits:
+            memory: "128Mi"
+            cpu: "50m"
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: redis-deploy
+spec:
+  selector:
+    matchLabels:
+      app: demo-voting-app
+      name: redis-app-pod
+  template:
+    metadata:
+      labels:
+        app: demo-voting-app
+        name: redis-app-pod
+    spec:
+      containers:
+      - name: redis-container
+        image: redis
+        resources:
+          limits:
+            memory: "128Mi"
+            cpu: "50m"
+        ports:
+        - containerPort: 6379
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: postgres-deploy
+spec:
+  selector:
+    matchLabels:
+      app: demo-voting-app
+      name: postgres-pod
+  template:
+    metadata:
+      labels:
+        app: demo-voting-app
+        name: postgres-pod
+    spec:
+      containers:
+      - name: postgres-container
+        image: postgres
+        resources:
+          limits:
+            memory: "128Mi"
+            cpu: "50m"
+        ports:
+        - containerPort: 5432
+        env:
+         - name: POSTGRES_USER
+           value: "postgres"
+         - name: POSTGRES_PASSWORD
+           value: "postgres"
+
